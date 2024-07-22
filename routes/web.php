@@ -4,7 +4,19 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 
-Route::resource('post', PostController::class);
+// Route::resource('post', PostController::class);
+
+Route::prefix('post')
+    ->controller(PostController::class)
+    ->group(function() {
+        Route::get('/', 'index');
+        Route::get('{post}', 'show')->whereNumber('post');
+        Route::get('/create', 'create');
+        Route::post('/', 'store');
+        Route::get('/{post}/edit', 'edit');
+        Route::put('/{book}', 'update')->whereNumber('post');
+        Route::delete('{post}', 'destroy')->whereNumber('post');
+    });
 
 Route::get('/', function() {
     return view('welcome');

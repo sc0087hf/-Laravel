@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Illuminate\Support\Facades\Auth;
+
 class RoleMiddleware
 {
     /**
@@ -15,9 +17,11 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->user()->role == 'admin') {
-            return $next($request);
+        if(Auth::user()->role != 'admin')
+        {
+            return redirect('post')->with('message', 'あなたは投稿権限を持っていません。');
         }
-        return redirect()->route('dashboard');
+
+        return $next($request);
     }
 }
